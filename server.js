@@ -25,24 +25,35 @@ var server = http.createServer(function(request, response){
     response.setHeader('Content-Type','text/html;')
     response.write(string);
     response.end();
-  }else if(path === '/main.js'){
+  }else if(path === '/main.js'){  //都是绝对路径
     let string = fs.readFileSync('./main.js','utf8');
     response.statusCode = 200;
-    response.setHeader('Content-Type','text/javascript;')
+    response.setHeader('Content-Type','text/javascript;charset = utf-8')
     response.write(string);
     response.end();
   }else if(path === '/xxx'){
     response.statusCode = 200;
-    response.setHeader('Content-Type','text/xml')    
+    // response.setHeader('Content-Type','text/xml;charset = utf-8')    
+    // response.write(`
+    // <note>
+    //   <to>to 张飞</to>
+    //   <from>from 关羽</from>
+    //   <heading>结义</heading>
+    //   <body>加上老大</body>
+    // </note>
+    // `);
+    response.setHeader('Content-Type','text/json;charset=utf-8');
     response.write(`
-    <?xml version="1.0",encoding="UTF-8"?>
-    <note>
-      <to>George</to>
-      <from>John</from>
-      <heading>Reminder</heading>
-      <body>Don't forget the meeting!</body>
-    </note>
-    `);
+    {
+      "note":{
+        "to":"关羽",
+        "from":"张飞飞",
+        "heading":"赤兔",
+        "content":"的卢 刘小备"
+      }
+    }`)
+    // 这不是一个对象  这是一个字符串 http第四部分永远是字符串 
+    // 这个字符串 刚好符号json对象的语法 后台是没有办法返回一个对象给前端的
     response.end();
   }
   else{
